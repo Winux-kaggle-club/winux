@@ -40,7 +40,7 @@ d.get("https://periodic.winuxdroid.com")
 d.find_element(By.ID,"element1").click()
 for i in range(1,119):
   d.get(f"https://periodic.winuxdroid.com/element.html?num={i}")
-  time.sleep(2)
+  time.sleep(3)
   for j in div_list:
     if(j==3):
       fetch(6,j,1)
@@ -73,10 +73,13 @@ with open("data.csv",'w') as f:
     z=0
     for i in templist:
       for keys in templist[z]:
-        if "," in templist[z][keys]:
-          f.write(f'"{templist[z][keys]}"')
+        if(templist[z][keys]!=""):
+          if("," in templist[z][keys]):
+            f.write(f'"{templist[z][keys]}"'+",")
+          else:
+            f.write(templist[z][keys]+",")
         else:
-          f.write(templist[z][keys]+",")
+          f.write(",")
       f.write("\n")
       z+=1  
     f.close()
