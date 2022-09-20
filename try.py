@@ -1,6 +1,4 @@
-import csv
 import time
-import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
@@ -14,10 +12,13 @@ div_list=[3,13,9]
 d.maximize_window()
 global Table_dict
 Table_dict={}
+global list_keys
+list_keys=[]
 
 
 
 
+# Function to fetch data
 def fetch(x,j,k):
   for l in range(x):
     try:
@@ -35,22 +36,51 @@ def fetch(x,j,k):
 
 
 
-for i in range(1,4):
+d.get("https://periodic.winuxdroid.com")
+d.find_element(By.ID,"element1").click()
+for i in range(1,119):
   d.get(f"https://periodic.winuxdroid.com/element.html?num={i}")
-  time.sleep(3)
+  time.sleep(2)
   for j in div_list:
     if(j==3):
       fetch(6,j,1)
     else:
       fetch(7,j,1)
   templist.append(Table_dict)
-  df = pd.DataFrame(templist)
   Table_dict={}       
 
 
 
 
-print(templist)
-df.to_csv('table.csv')
-time.sleep(1)    
+
+# If we don't know all the elements have same number of keys we can use this approach
+# z=0
+# for i in templist:
+#   for keys in templist[z]:
+#     if(keys not in list_keys):
+#       list_keys.append(keys)
+#   z+=1        
+
+
+
+
+for keys in templist[0]:
+  list_keys.append(keys)
+with open("data.csv",'w') as f:
+    for i in list_keys:
+        f.write(i+",")
+    f.write("\n")
+    z=0
+    for i in templist:
+      for keys in templist[z]:
+        if "," in templist[z][keys]:
+          f.write(f'"{templist[z][keys]}"')
+        else:
+          f.write(templist[z][keys]+",")
+      f.write("\n")
+      z+=1  
+    f.close()
+
+
+# Peace Out    
 d.quit()
