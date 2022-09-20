@@ -1,3 +1,4 @@
+import csv
 import time
 import pandas as pd
 from selenium import webdriver
@@ -20,6 +21,10 @@ Table_dict={}
 def fetch(x,j,k):
   for l in range(x):
     try:
+      if(k==1 and j==3):
+        data_key="Symbol"
+        data_value=d.find_element(By.ID,"resultSymbolInner").text
+        Table_dict[data_key] = data_value
       data_key=d.find_element(By.XPATH,f'//*[@class="masonry"]/div[{j}]/div[1]/div[{k}]').text
       data_value=d.find_element(By.XPATH,f'//*[@class="masonry"]/div[{j}]/div[1]/div[{k+1}]').text         
       Table_dict[data_key] = data_value
